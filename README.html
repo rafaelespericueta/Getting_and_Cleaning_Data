@@ -142,9 +142,11 @@ hr {
 </head>
 
 <body>
-<h1>Coursera - Getting and Cleaning Data - Course Project</h1>
+<h2>Coursera - Getting and Cleaning Data - Course Project</h2>
 
-<h2>Author:  Rafael Espericueta</h2>
+<h1></h1>
+
+<h3>Author:  Rafael Espericueta</h3>
 
 <hr/>
 
@@ -173,30 +175,18 @@ or <em>&ldquo;std&rdquo;</em>. The test data was similarly read in (files: <em>s
 <p>At this point we found the data to be complete, with no NA&#39;s present. However, we did discover a couple of columns with different names but containing the same data. It turned out that the columns <em>Time.BodyAccMag.mean</em> and <em>Time.GravityAccMag.mean</em> contained the same data, so we deleted the column <em>Time.BodyAccMag.mean</em>.  Also the column
 <em>Time.BodyAccMag.std</em> and <em>Time.GravityAccMag.std</em> contained the same data, so we deleted the column <em>Time.BodyAccMag.std</em>.  We then checked for duplicate rows, but found none.</p>
 
-<h3>Output our 1st  Tidy Data File</h3>
+<h3>Create a (tidy) Data Frame of Sums of Measurements for each Combination of Subject and Activity</h3>
 
-<p>Our tidy data frame, <em>alldat</em>, was then written to the file, <em>tidy_data.txt</em>, using the command:  </p>
+<p>From the data frame <em>alldat</em>, we created a new (and tidy!) data frame <em>alldat.mean</em> containing the means for each choice of a subject and an activity. Each subject had several measurements for each activity, which were averaged, so we ended up with a data frame with 6 rows for each subject (corresponding to the 6 activities, <em>Walking</em>, <em>Walking_upstairs</em>, <em>Walking_downstairs</em>, <em>Sitting</em>, <em>Standing</em>, <em>Laying</em>). The column names were left as before, though in the new data frame <em>alldat.mean</em>, the values are the <em>means</em> of those measurements. Appending the designation &ldquo;Mean&rdquo; to each name would have made the feature names a bit cumbersome, and this didn&#39;t seem necessary since ALL of the entries are means (except of course the subject and activity columns).</p>
 
-<pre><code>write.table(alldat, &quot;tidy_data.txt&quot;, sep=&quot;\t&quot;)
-</code></pre>
+<h3>Output our Tidy Data File (of Means)</h3>
 
-<p>To read this file, use the command:</p>
-
-<pre><code>td &lt;- read.table(&quot;tidy_data.txt&quot;, sep=&quot;\t&quot;)
-</code></pre>
-
-<h3>Create a Data Frame of Sums of Measurements for each Combination of Subject and Activity</h3>
-
-<p>From the data frame <em>alldat</em>, we created a new data frame <em>alldat.mean</em> containing the means for each choice of a subject and an activity. Each subject had several measurements for each activity, which were averaged, so we ended up with a data frame with 6 rows for each subject (corresponding to the 6 activities, <em>Walking</em>, <em>Walking_upstairs</em>, <em>Walking_downstairs</em>, <em>Sitting</em>, <em>Standing</em>, <em>Laying</em>). The column names were left as before, though in the new data frame <em>alldat.mean</em>, the values are the <em>means</em> of those measurements. Appending the designation &ldquo;Mean&rdquo; to each name would have made the feature names a bit cumbersome.</p>
-
-<h3>Output our 2nd Tidy Data File (of means)</h3>
-
-<p>Finally we output our second tidy data frame, <em>alldat.mean</em>, to the file <em>tidy_data_mean.txt</em>, using the command:</p>
+<p>Finally we output our tidy data frame, <em>alldat.mean</em>, to the text file <em>tidy_data_mean.txt</em>, using the command:</p>
 
 <pre><code>write.table(alldat.mean, &quot;tidy_data_means.txt&quot;, sep=&quot;\t&quot;, row.names=FALSE)
 </code></pre>
 
-<p>Read this file using the command:</p>
+<p>One can read this file into Rstudio using the command:</p>
 
 <pre><code>td &lt;- read.table(&quot;tidy_data_means.txt&quot;, header = TRUE, sep=&quot;\t&quot;)
 </code></pre>
