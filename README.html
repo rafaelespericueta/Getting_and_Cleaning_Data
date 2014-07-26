@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Coursera - Getting and Cleaning Data - Course Project</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>Coursera - Getting and Cleaning Data - Course Project</h1>
+
+<h2>Author:  Rafael Espericueta</h2>
+
+<hr/>
+
+<p>The data linked to from the course website represent data collected from the accelerometers from the Samsung Galaxy S smartphone. A full description is available at the site where the data was obtained: </p>
+
+<p><a href="http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones">http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones</a> </p>
+
+<p>Here are the data for the project: </p>
+
+<p><a href="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip">https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip</a> </p>
+
+<hr/>
+
+<h3>Reading in the Data</h3>
+
+<p>After unzipping the data file, we first read in the file <em>features.txt</em>, to modify these original feature names to use in naming our data frame columns. We extracted only those names containing <em>mean</em> or <em>std</em> as substrings. Further we then made sure the names were valid ones using the <em>make.names</em> command. That command replaces illegal characters with dots, so next we removed any pairs of dots, so that for example <em>cat&hellip;V&hellip;2</em> would become <em>cat.V.2</em>. We also noted by reading the file <em>features_info.txt</em> that features beginning with a &ldquo;t&rdquo; represented time series data, and features beginning with a &ldquo;f&rdquo; were FFT transformed features (transformed to the frequency domain).  So we
+replaced the initial &ldquo;t&rdquo; by &ldquo;Time.&rdquo;, and an initial &ldquo;f&rdquo; was replaced by &ldquo;Freq.&rdquo; for improved readability.</p>
+
+<p>Next we read in the file containing the subject codes <em>subject_train.txt</em>, the training data <em>X_train.txt</em>, and the training labels <em>&ldquo;y_train.txt&rdquo;</em>, and then subsetted the training data to only include the columns containing <em>mean</em>
+or <em>&ldquo;std&rdquo;</em>. The test data was similarly read in (files: <em>subject_test.txt</em>, <em>X_test.txt</em>, and <em>y_test.txt</em>) and subsetted as before.</p>
+
+<p>The training labels and test labels were appended to the traning and test data frames as final columns using <em>cbind</em>, and then the training and test data frames were combined using <em>rbind</em> into one data frame, <em>alldat</em>. Then the activity codes were tranformed from numeric to plain English for easier readability.</p>
+
+<p>At this point we found the data to be complete, with no NA&#39;s present. However, we did discover a couple of columns with different names but containing the same data. It turned out that the columns <em>Time.BodyAccMag.mean</em> and <em>Time.GravityAccMag.mean</em> contained the same data, so we deleted the column <em>Time.BodyAccMag.mean</em>.  Also the column
+<em>Time.BodyAccMag.std</em> and <em>Time.GravityAccMag.std</em> contained the same data, so we deleted the column <em>Time.BodyAccMag.std</em>.  We then checked for duplicate rows, but found none.</p>
+
+<p>Our tidy data frame, <em>alldat</em>, was then written to the file, <em>tidy_data.txt</em>, using the command:  </p>
+
+<pre><code>write.table(alldat, &quot;tidy_data.txt&quot;, sep=&quot;\t&quot;)
+</code></pre>
+
+<p>To read this file, use the command:</p>
+
+<pre><code>td &lt;- read.table(&quot;tidy_data.txt&quot;, sep=&quot;\t&quot;)
+</code></pre>
+
+<p>From the data frame <em>alldat</em>, we created a new data frame <em>alldat.mean</em> containing the means for each choice of a subject and an activity. Each subject had several measurements for each activity, which were averaged, so we ended up with a data frame with 6 rows for each subject (corresponding to the 6 activities, <em>Walking</em>, <em>Walking_upstairs</em>, <em>Walking_downstairs</em>, <em>Sitting</em>, <em>Standing</em>, <em>Laying</em>). The column names were left as before, though in the new data frame <em>alldat.mean</em>, the values are the <em>means</em> of those measurements. Appending the designation &ldquo;Mean&rdquo; to each name would have made the feature names a bit cumbersome.</p>
+
+<p>Finally we output our second tidy data frame, <em>alldat.mean</em>, to the file <em>tidy_data_mean.txt</em>, using the command:</p>
+
+<pre><code>write.table(alldat.mean, &quot;tidy_data_means.txt&quot;, sep=&quot;\t&quot;, row.names=FALSE)
+</code></pre>
+
+<p>Read this file using the command:</p>
+
+<pre><code>td &lt;- read.table(&quot;tidy_data_means.txt&quot;, header = TRUE, sep=&quot;\t&quot;)
+</code></pre>
+
+</body>
+
+</html>
+
