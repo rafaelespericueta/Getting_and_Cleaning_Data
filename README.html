@@ -166,10 +166,14 @@ replaced the initial &ldquo;t&rdquo; by &ldquo;Time.&rdquo;, and an initial &ldq
 <p>Next we read in the file containing the subject codes <em>subject_train.txt</em>, the training data <em>X_train.txt</em>, and the training labels <em>&ldquo;y_train.txt&rdquo;</em>, and then subsetted the training data to only include the columns containing <em>mean</em>
 or <em>&ldquo;std&rdquo;</em>. The test data was similarly read in (files: <em>subject_test.txt</em>, <em>X_test.txt</em>, and <em>y_test.txt</em>) and subsetted as before.</p>
 
+<h3>Data Munging</h3>
+
 <p>The training labels and test labels were appended to the traning and test data frames as final columns using <em>cbind</em>, and then the training and test data frames were combined using <em>rbind</em> into one data frame, <em>alldat</em>. Then the activity codes were tranformed from numeric to plain English for easier readability.</p>
 
 <p>At this point we found the data to be complete, with no NA&#39;s present. However, we did discover a couple of columns with different names but containing the same data. It turned out that the columns <em>Time.BodyAccMag.mean</em> and <em>Time.GravityAccMag.mean</em> contained the same data, so we deleted the column <em>Time.BodyAccMag.mean</em>.  Also the column
 <em>Time.BodyAccMag.std</em> and <em>Time.GravityAccMag.std</em> contained the same data, so we deleted the column <em>Time.BodyAccMag.std</em>.  We then checked for duplicate rows, but found none.</p>
+
+<h3>Output our 1st  Tidy Data File</h3>
 
 <p>Our tidy data frame, <em>alldat</em>, was then written to the file, <em>tidy_data.txt</em>, using the command:  </p>
 
@@ -181,7 +185,11 @@ or <em>&ldquo;std&rdquo;</em>. The test data was similarly read in (files: <em>s
 <pre><code>td &lt;- read.table(&quot;tidy_data.txt&quot;, sep=&quot;\t&quot;)
 </code></pre>
 
+<h3>Create a Data Frame of Sums of Measurements for each Combination of Subject and Activity</h3>
+
 <p>From the data frame <em>alldat</em>, we created a new data frame <em>alldat.mean</em> containing the means for each choice of a subject and an activity. Each subject had several measurements for each activity, which were averaged, so we ended up with a data frame with 6 rows for each subject (corresponding to the 6 activities, <em>Walking</em>, <em>Walking_upstairs</em>, <em>Walking_downstairs</em>, <em>Sitting</em>, <em>Standing</em>, <em>Laying</em>). The column names were left as before, though in the new data frame <em>alldat.mean</em>, the values are the <em>means</em> of those measurements. Appending the designation &ldquo;Mean&rdquo; to each name would have made the feature names a bit cumbersome.</p>
+
+<h3>Output our 2nd Tidy Data File (of means)</h3>
 
 <p>Finally we output our second tidy data frame, <em>alldat.mean</em>, to the file <em>tidy_data_mean.txt</em>, using the command:</p>
 
