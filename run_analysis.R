@@ -98,13 +98,6 @@ dim(alldat) == dim(alldat[!duplicated(alldat),])  # TRUE TRUE
 # were no duplicate rows.
 
 
-# Output our tidy dataframe, alldat, to file, "tidy_data.txt".
-write.table(alldat, "tidy_data.txt", sep="\t")
-# THIS is how to read that output file:
-# td <- read.table("tidy_data.txt", sep="\t")
-# sum(td != alldat) == 0   # TRUE, so the file was saved correctly
-
-
 #
 # Generate a mean for each combination of subject, activity, and measurement.
 #
